@@ -24,23 +24,24 @@ namespace OpenWeather
 
         public async Task GetWeather()
         {
-            var weather = new Weather();
             var apiKey = new ApiKey();
-            var examples = new Example();
+            var weatherResponse = new WeatherResponse();
 
-            weather.lat = Convert.ToDouble(latitude.Text);
-            weather.lon = Convert.ToDouble(longitude.Text);
+            latitude.Text = Convert.ToString(weatherResponse.Lat);
+            longitude.Text = Convert.ToString(weatherResponse.Lon);
 
             try
             {
                 ServicePointManager.Expect100Continue = true;
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
-                string url = $"http://api.openweathermap.org/data/2.5/onecall?lat={weather.lat}&lon={weather.lon}&exclude=minutely,hourly&units=imperial&appid={apiKey.key}";
+                string url = $"http://api.openweathermap.org/data/2.5/onecall?lat={weatherResponse.Lat}&lon={weatherResponse.Lon}&exclude=minutely,hourly&units=imperial&appid={apiKey.key}";
 
                 string response = await ApiClient.GetStringAsync(url);
 
-                Example weatherObject = JsonConvert.DeserializeObject<Example>(response);
+                WeatherResponse weatherObject = JsonConvert.DeserializeObject<WeatherResponse>(response);
+
+                weatherResults.Text = weatherObject.current.weather.FirstOrDefault().main;
             }
 
             catch
