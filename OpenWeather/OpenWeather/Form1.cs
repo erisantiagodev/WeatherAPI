@@ -41,7 +41,8 @@ namespace OpenWeather
 
                 WeatherResponse weatherObject = JsonConvert.DeserializeObject<WeatherResponse>(response);
 
-                weatherResults.Text = weatherObject.current.weather.FirstOrDefault().main;
+                weatherResults.Text = weatherObject.current.weather.FirstOrDefault().main + " " + weatherObject.current.weather.FirstOrDefault().description;
+                //weatherResults.Text = weatherObject.daily.temp.FirstOrDefault().day;
             }
 
             catch
