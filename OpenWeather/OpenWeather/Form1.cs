@@ -41,8 +41,12 @@ namespace OpenWeather
 
                 WeatherResponse weatherObject = JsonConvert.DeserializeObject<WeatherResponse>(response);
 
-                weatherResults.Text = weatherObject.current.weather.FirstOrDefault().main + " " + weatherObject.current.weather.FirstOrDefault().description;
-                //weatherResults.Text = weatherObject.daily.temp.FirstOrDefault().day;
+                string weatherInfo = $"The current weather is {weatherObject.current.weather.FirstOrDefault().main} with some {weatherObject.current.weather.FirstOrDefault().description}.";
+                string tempInfo = $"The current temperature is {weatherObject.current.temp}";
+
+                string weatherAndTemp = weatherInfo + tempInfo;
+
+                weatherResults.Text = weatherAndTemp;
             }
 
             catch
