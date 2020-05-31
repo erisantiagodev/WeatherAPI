@@ -22,31 +22,18 @@ namespace OpenWeather
 
         HttpClient ApiClient = new HttpClient();
 
-        public async Task GetWeather()
+        public async Task PrintGetWeathercData()
         {
-            var apiKey = new ApiKey();
-            var weatherResponse = new WeatherResponse();
+            double userlatitude = Convert.ToDouble(latitude.Text);
+            double userlongitude = Convert.ToDouble(longitude.Text);
 
-            latitude.Text = Convert.ToString(weatherResponse.Lat);
-            longitude.Text = Convert.ToString(weatherResponse.Lon);
+            var apiWrapper = new APIWrapper(userlatitude, userlongitude);
+
+            await apiWrapper.GetWeathercData();
 
             try
             {
-                ServicePointManager.Expect100Continue = true;
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
-                string url = $"http://api.openweathermap.org/data/2.5/onecall?lat={weatherResponse.Lat}&lon={weatherResponse.Lon}&exclude=minutely,hourly&units=imperial&appid={apiKey.key}";
-
-                string response = await ApiClient.GetStringAsync(url);
-
-                WeatherResponse weatherObject = JsonConvert.DeserializeObject<WeatherResponse>(response);
-
-                string weatherInfo = $"The current weather is {weatherObject.current.weather.FirstOrDefault().main} with some {weatherObject.current.weather.FirstOrDefault().description}.";
-                string tempInfo = $"The current temperature is {weatherObject.current.temp}";
-
-                string weatherAndTemp = weatherInfo + tempInfo;
-
-                weatherResults.Text = weatherAndTemp;
+                weatherResults.Text = apiWrapper.weatherAndTemp;
             }
 
             catch
@@ -60,7 +47,7 @@ namespace OpenWeather
         {
             try
             {
-                await GetWeather();
+                await PrintGetWeathercData();
             }
 
             catch
